@@ -3,6 +3,7 @@
 #include <iostream>
 using namespace boost::filesystem;
 
+// Algo de recherche récursive pour trouver les fichiers
 void recursiveCheck(std::string Path){
   path verifiedPath = Path;
   for(path::iterator it = verifiedPath.begin();it != verifiedPath.end();it++){
