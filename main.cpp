@@ -12,3 +12,4 @@ int main(int argc, char* argv[1]){
     for(boost::filesystem::recursive_directory_iterator end, dir("./"); dir != end; ++dir){}
   } else while(!(boost::filesystem::exists(inpPath)) || !(boost::filesystem::is_directory(inpPath))){}
 }
+ // test for Sublime Merge
