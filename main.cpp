@@ -9,6 +9,6 @@ int main(int argc, char* argv[1]){
   std::cout<<"Enter a path to recursively search on : ";
   std::cin>>inpPath;
   if(boost::filesystem::exists(inpPath) && boost::filesystem::is_directory(inpPath)){
-    boost::filesystem::recursive_directory_iterator(inpPath);
-  }
+    for(boost::filesystem::recursive_directory_iterator end, dir("./"); dir != end; ++dir){}
+  } else while(!(boost::filesystem::exists(inpPath)) || !(boost::filesystem::is_directory(inpPath))){}
 }
