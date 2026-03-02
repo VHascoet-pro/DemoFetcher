@@ -1,46 +1,41 @@
 #include <boost/filesystem.hpp>
+#include <boost/filesystem/operations.hpp>
 #include <iostream>
-using namespace boost::filesystem; 
-bool FileChecker(path inputPath, path demoPath, const std::string exList[]){
-  int i = 0;
-  bool validFile;
-  while(inputPath.extension() != exList[i] && (i>=0 && i <= 3)){
-    i++;
-    validFile = false;
-    if(inputPath.extension() == exList[i]){
-      validFile = true;
+using namespace boost::filesystem;
+using std::cout, std::cin;
+
+void fileChecker(path filePath, path demoPath){
+  bool valid = false;
+  std::vector<std::string> extensionList = {"replay.Gbx", "dem", "dem2", "lsp", "SC2Replay"};
+  int* i = new int;
+  while(valid == false){
+    for(*i = 0;*i < extensionList.size(); i++){
+      if(filePath.extension() == extensionList[*i]){
+        copy_file(filePath, demoPath);
+        valid = true;
+      }
     }
   }
-
-  if(validFile == true){
-    copy_file(inputPath, demoPath);
-    return validFile;
-  } else return validFile;
+  delete i;
 }
 
-void RecursiveCheck(path inputPath, const std::string exList[]){
-  directory_iterator dir;
-  for(recursive_directory_iterator end; dir != end; ++dir){} // Prototype, I don't know how to continue this shit'
-}
-
-int main(int argc, char* argv[1]){
-  const std::string extensionList[] = {".replay.Gbx", ".dem", ".lsp", ".SC2Replay"};
-
+int main(){
+  // std::vector<std::string> extensionList = {"replay.Gbx", "dem", "dem2", "lsp", "SC2Replay"};
+ 
   path Path;
-  path demoPath = "./demos/";
+  const path demoPath = "./demos/";
 
-  std::cout<<"Verifying the existence of the demo folder...";
+  cout<<"Verifying the existence of the demo folder...";
   if(!exists(demoPath)){
+    cout<<"\nThe demo folder does not exist... creating now !";
     create_directory(demoPath);
   }
 
-  std::cout<<"Enter a path to recursively search on : ";
-  std::cin>>Path;
+  cout<<"\n\nEnter a path to recursively search on : ";
+  cin>>Path;
   while(!(exists(Path))){
-    std::cout<<"This path does not exist, please enter an existing path : ";
-    std::cin>>Path;
+    cout<<"\nThis path does not exist, please enter an existing path : ";
+    cin>>Path;
   }
-  if(Path.has_extension()){
-    FileChecker(Path, demoPath, extensionList);
-  } else RecursiveCheck(Path, extensionList);
+  fileChecker(Path, demoPath);
 }
