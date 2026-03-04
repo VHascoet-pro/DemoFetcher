@@ -1,29 +1,39 @@
 #include <boost/filesystem.hpp>
-#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/directory.hpp>
+#include <boost/range/iterator_range.hpp>
+#include <boost/range/iterator_range_core.hpp>
 #include <iostream>
-using namespace boost::filesystem;
-using std::cout, std::cin;
 
-void fileChecker(path filePath, path demoPath){
-  bool valid = false;
-  std::vector<std::string> extensionList = {"replay.Gbx", "dem", "dem2", "lsp", "SC2Replay"};
-  int* i = new int;
+using namespace boost::filesystem;
+using std::cout, std::cin, std::vector;
+const path demoPath = "./demos/";
+
+bool fileChecker(path filePath, path demoPath){
+  bool valid, found= false;
+  vector<std::string> extensionList = {"replay.Gbx", "dem", "dem2", "lsp", "SC2Replay"};
   while(valid == false){
-    for(*i = 0;*i < extensionList.size(); i++){
-      if(filePath.extension() == extensionList[*i]){
+    for(int i; i < extensionList.size(); i++){
+      if(filePath.extension() == extensionList[i]){
         copy_file(filePath, demoPath);
         valid = true;
+        found = true;
       }
     }
   }
-  delete i;
+  return found;
+}
+
+void recursiveCheck(path filePath){
+  for(auto& entry : boost::make_iterator_range(recursive_directory_iterator(filePath), {})){
+    if(is_regular_file(entry))
+      fileChecker(entry.path(), demoPath);
+  }
 }
 
 int main(){
   // std::vector<std::string> extensionList = {"replay.Gbx", "dem", "dem2", "lsp", "SC2Replay"};
  
   path Path;
-  const path demoPath = "./demos/";
 
   cout<<"Verifying the existence of the demo folder...";
   if(!exists(demoPath)){
@@ -37,5 +47,7 @@ int main(){
     cout<<"\nThis path does not exist, please enter an existing path : ";
     cin>>Path;
   }
-  fileChecker(Path, demoPath);
+  if(fileChecker(Path, demoPath) == 0){
+    recursiveCheck(Path);
+  }
 }
