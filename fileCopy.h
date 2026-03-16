@@ -9,7 +9,10 @@ namespace DemoParsers{
         struct GAME_MAP{const std::vector<std::string> exList = {".dem", ".dem2", ".lsp"};};
 
         struct GAME_PATHS{
+                const boost::filesystem::path jsonFolder = boost::filesystem::current_path().append("./json");
+                const boost::filesystem::path chartsFolder = boost::filesystem::current_path().append("./charts");
                 const boost::filesystem::path timeFolder = boost::filesystem::current_path().append("./times");
+                
                 const boost::filesystem::path QuakeFolder = timeFolder / "/quake";
                 const boost::filesystem::path Quake2Folder = timeFolder / "/quake2";
                 const boost::filesystem::path DoomFolder = timeFolder / "/doom";
@@ -27,13 +30,15 @@ namespace DemoParsers{
         class JSON_FORMATTER{
                 public:
                         void fileAnalyser(boost::filesystem::path populatedPath);
-                        void timeFormat();
+                        // void timeFormat();
         };
 
+        /**
         class JSONtoCharts{
                 public:
                         void JsonParser();
                         void ChartToSVG();
                         void ChartToPng();
         };
+        */
 }
