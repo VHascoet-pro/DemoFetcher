@@ -21,7 +21,7 @@ This is for my demos and will help for creating graphs for my own website I am b
 
 This program may create a graph for EACH level for EACH demo (PNG + SVG).
 
-#### French
+### French
 Salut !
 Donc ceci est un petit (j'espère, je vous en supplie ne me faites pas divaguer sur un projet à 20 fichiers cpp, 4 fichiers d'en-têtes) projet.
 
