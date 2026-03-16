@@ -1,13 +1,16 @@
 #include "fileCopy.h"
+#include <array>
 #include <boost/filesystem.hpp>
+#include <fstream>
+#include <vector>
 
 DemoParsers::GAME_PATHS gp;
 
 struct Quake1Demo_MAP{
         // Inclus tous les messages réseau envoyés dans le fichier .dem
-        int SVC_PROTOCOL = 15;
-        std::string SVC_MESSAGE;
-        bool SVC_DISCONNECTMESSAGE;
+        long SVC_BLOCKSIZE;
+        std::vector<int> angles;
+        
 };
 /**
  Cette fonction permet de parser les données du fichier de démo et en sortir le niveau + temps
@@ -27,4 +30,6 @@ struct Quake1Demo_MAP{
  @param SVC_DISCONNECTMESSAGE permet un message contenant le temps final de la démo (UTILE)
 */
 
-void DemoParsers::DemoOperator::Quake1DemoToJson(boost::filesystem::path q1DemoPath){}
+void DemoParsers::DemoOperator::Quake1DemoToJson(boost::filesystem::path q1DemoPath){
+        std::ifstream LocalDemo(q1DemoPath, std::ios_base::in | std::ios_base::binary);
+}
