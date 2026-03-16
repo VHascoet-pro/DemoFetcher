@@ -4,10 +4,9 @@
 #include <boost/filesystem/path.hpp>
 #include <string>
 #include <vector>
+
 namespace DemoParsers{
-        struct GAME_MAP{
-                const std::vector<std::string> exList = {".dem", ".dem2", ".lsp"};
-        };
+        struct GAME_MAP{const std::vector<std::string> exList = {".dem", ".dem2", ".lsp"};};
 
         struct GAME_PATHS{
                 const boost::filesystem::path timeFolder = boost::filesystem::current_path().append("./times");
@@ -18,21 +17,16 @@ namespace DemoParsers{
         
         class DemoOperator{
                 public:
-                        void FileCopy(boost::filesystem::path initPath);
-                        void QuakeDemoParser();
-                        void Quake2DemoParser();
-                        void DoomDemoParser();
-        };
+                        void FileCopy(boost::filesystem::path initPath);        
 
-        class demoToJSON{
-                public:
-                        void Quake1DemoToJson();
-                        void Quake2DemoToJson();
-                        void DoomDemoToJson();
+                        void Quake1DemoToJson(boost::filesystem::path q1DemPath);
+                        void Quake2DemoToJson(boost::filesystem::path q2DemPath);
+                        void DoomDemoToJson(boost::filesystem::path doomDemPath);
         };
 
         class JSON_FORMATTER{
                 public:
+                        void fileAnalyser(boost::filesystem::path populatedPath);
                         void timeFormat();
         };
 

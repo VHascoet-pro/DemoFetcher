@@ -30,4 +30,6 @@ int main(int argc, char* argv[1]){
                 cin>>Path;
         }
         dop.FileCopy(Path);
+
+        JsF.fileAnalyser(gp.timeFolder);
 }
