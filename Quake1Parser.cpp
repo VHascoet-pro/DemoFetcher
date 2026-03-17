@@ -1,6 +1,7 @@
 #include "fileCopy.h"
 #include <array>
 #include <boost/filesystem.hpp>
+#include <cstdint>
 #include <fstream>
 #include <vector>
 
@@ -8,9 +9,9 @@ DemoParsers::GAME_PATHS gp;
 
 struct Quake1Demo_MAP{
         // Inclus tous les messages réseau envoyés dans le fichier .dem
-        long SVC_BLOCKSIZE;
-        std::vector<int> angles;
-        
+        long SVC_TIMEBLOCK;
+        char* SVC_INTERMISSION;
+        bool SVC_isCOMPLETED;
 };
 /**
  Cette fonction permet de parser les données du fichier de démo et en sortir le niveau + temps
@@ -20,9 +21,7 @@ struct Quake1Demo_MAP{
  
  @param Quake1Demo_MAP Une structure me permettant d'y inclure les types de messages
                        rencoyés depuis le parseur
- 
- @param SVC_PROTOCOL Protocole réseau exploité dans le client Quake
- 
+
  @param SVC_MESSAGE Message contenant le temps (1 unité par tic de 10Hz) de la démo, le nom de
                     la map, joueur, angle de la caméra du joueur (x-pitch, y-roll, z-yaw) par
                     tic
@@ -32,4 +31,6 @@ struct Quake1Demo_MAP{
 
 void DemoParsers::DemoOperator::Quake1DemoToJson(boost::filesystem::path q1DemoPath){
         std::ifstream LocalDemo(q1DemoPath, std::ios_base::in | std::ios_base::binary);
+
+        while(LocalDemo.is_open()){}
 }
