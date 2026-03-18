@@ -1,6 +1,7 @@
 #include "fileCopy.h"
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/path.hpp>
+#include <cstddef>
 #include <cstdint>
 #include <fstream>
 #include <stdexcept>
@@ -9,16 +10,26 @@
 DemoParsers::GAME_PATHS gp;
 
 /**
- Ces deux structures sont pour avoir :
- 1) Les blocks à ne PAS skipper triés par Identification
- 2) Les types des blocks suivant l'identification (EX: pour SVC_TIME : 27.13s, on à 0x07 F5D8D941 > trié en Little-endian : 41D9D8F5 > calcul suivant IEEE :
-                                                                       1x 2^131-127 x (1+ 5878261 / 2^23) = 27.21189308s)
+  Intégration du fichier binaire intégralement en buffer
 */
+
+struct BitStream{
+        const uint8_t data;
+        size_t size;
+        size_t pos = 0;
+        
+        uint8_t ReadByte() {check(1) }
+};
+
 struct QUAKE_BLOCKS{
         float viewangles[3];
         int32_t msg_length;
         std::vector<uint32_t> msg_data;
 };
+
+/**
+    Lecture du fichier .dem en entier
+*/
 
 std::vector<QUAKE_BLOCKS> LoadDem(boost::filesystem::path q1DemoPath){
         std::ifstream file(q1DemoPath, std::ios::binary);
@@ -27,7 +38,11 @@ std::vector<QUAKE_BLOCKS> LoadDem(boost::filesystem::path q1DemoPath){
         // lire la piste CD (ASCII + '\n')
         std::string cdtrack;
         char c;
-        while(file.get(c) && c != '\n') cdtrack += c;
+        while(file.get(c) && c != '\n'){
+          cdtrack += c;
+        }
+
+        
 }
 
 struct MAP_RESULT{
