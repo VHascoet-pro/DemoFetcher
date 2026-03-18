@@ -1,6 +1,10 @@
 #include "fileCopy.h"
 #include <boost/filesystem.hpp>
+#include <boost/filesystem/path.hpp>
+#include <cstdint>
 #include <fstream>
+#include <stdexcept>
+#include <vector>
 
 DemoParsers::GAME_PATHS gp;
 
@@ -11,29 +15,37 @@ DemoParsers::GAME_PATHS gp;
                                                                        1x 2^131-127 x (1+ 5878261 / 2^23) = 27.21189308s)
 */
 struct QUAKE_BLOCKS{
-        int SVC_TIME = 0x07;
-        int SVC_PLAYERNAME = 0x0D;
-        int SVC_INTERMISSION = 0x1E;
-        int SVC_DISCONNECTMESSAGE = 0x02;
+        float viewangles[3];
+        int32_t msg_length;
+        std::vector<uint32_t> msg_data;
 };
 
-struct QUAKE_BLOCKTYPES{
-        long SVC_TIMESIZE;
-        char SVC_PLAYER;
-        char SVC_IntMessage;
-        bool DISCONNECTED;
+std::vector<QUAKE_BLOCKS> LoadDem(boost::filesystem::path q1DemoPath){
+        std::ifstream file(q1DemoPath, std::ios::binary);
+        if(!file) throw std::runtime_error("Cannot open the file");
+
+        // lire la piste CD (ASCII + '\n')
+        std::string cdtrack;
+        char c;
+        while(file.get(c) && c != '\n') cdtrack += c;
+}
+
+struct MAP_RESULT{
+        std::string MapName;
+        float finishTime;
+        bool completed;
 };
 
+std::vector<MAP_RESULT> ExtractMapTimes(boost::filesystem::path q1DemoPath){
+        auto blocks = LoadDem(q1DemoPath);
+}
 /**
  On à pas besoin de beaucoup de trames afin d'analyser les trames, analyser toutes les trames
  serait trop long et demandera trop de mémoire, on doit SKIPPER des trames.
-
- @param isSkipped Retourne l'état du Parseur (est bel et bien évité).
 */
 
-bool BlockSkip(){
-        bool isSkipped = false;
-        return isSkipped;
+void SkipSVC(){
+        
 }
 
 /**
@@ -41,18 +53,6 @@ bool BlockSkip(){
  pour pouvoir l'inclure dans le fichier JSON nécessaire
  @param q1DemoPath Chemin absolu du fichier de démo envoyé depuis la recherche récursive de la
                    fonction FileCopy
- 
- @param QUAKE_BLOCKS Une structure me permettant d'y inclure les types de messages
-                     renvoyés depuis le parseur
+ */
 
- @param SVC_MESSAGE Message contenant le temps (1 unité par tic de 10Hz) de la démo, le nom de
-                    la map, joueur, angle de la caméra du joueur (x-pitch, y-roll, z-yaw) par
-                    tic
- 
- @param SVC_DISCONNECTMESSAGE permet un message contenant le temps final de la démo (UTILE)
-*/
-
-void DemoParsers::DemoOperator::Quake1DemoToJson(boost::filesystem::path q1DemoPath){
-        std::ifstream LocalDemo(q1DemoPath, std::ios_base::in | std::ios_base::binary);
-        
-}
+void DemoParsers::DemoOperator::Quake1DemoToJson(boost::filesystem::path q1DemoPath){}
